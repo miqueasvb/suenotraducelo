@@ -1,3 +1,3 @@
 [build]
+  publish = "."
   functions = "netlify/functions"
-  publish = "build" # o la carpeta donde se genera tu web estática
