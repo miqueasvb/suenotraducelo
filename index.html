@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SueñoTraduce</title>
+  <script defer src="script.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans flex items-center justify-center min-h-screen">
+  <div class="bg-white p-6 rounded-2xl shadow-md w-full max-w-xl space-y-4">
+    <h1 class="text-2xl font-bold text-center">🛌 SueñoTraduce</h1>
+    <p class="text-gray-600 text-center">Escribí tu sueño y dejá que la IA lo interprete</p>
+    <textarea id="dreamInput" class="w-full h-32 p-3 border rounded-xl resize-none" placeholder="Ej: Soñé que se me caían los dientes..."></textarea>
+    <button id="analyzeBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-xl font-semibold">Interpretar sueño</button>
+    <div id="result" class="mt-4 space-y-3 hidden">
+      <div><strong>🔮 Significado simbólico:</strong> <p id="symbolic" class="text-gray-700"></p></div>
+      <div><strong>🧠 Análisis emocional:</strong> <p id="emotional" class="text-gray-700"></p></div>
+      <div><strong>💡 Consejo personal:</strong> <p id="advice" class="text-gray-700"></p></div>
+    </div>
+  </div>
+</body>
+</html>
