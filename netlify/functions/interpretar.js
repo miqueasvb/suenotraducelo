@@ -12,6 +12,9 @@ exports.handler = async function(event, context) {
       };
     }
 
+    // ✅ VERIFICAMOS SI LLEGA LA CLAVE
+    console.log("🔐 CLAVE OPENAI:", process.env.OPENAI_API_KEY);
+
     const configuration = new Configuration({
       apiKey: process.env.OPENAI_API_KEY,
     });
