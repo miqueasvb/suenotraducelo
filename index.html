@@ -4,20 +4,81 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SueñoTraduce</title>
-  <script defer src="script.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans flex items-center justify-center min-h-screen">
   <div class="bg-white p-6 rounded-2xl shadow-md w-full max-w-xl space-y-4">
     <h1 class="text-2xl font-bold text-center">🛌 SueñoTraduce</h1>
     <p class="text-gray-600 text-center">Escribí tu sueño y dejá que la IA lo interprete</p>
+
     <textarea id="dreamInput" class="w-full h-32 p-3 border rounded-xl resize-none" placeholder="Ej: Soñé que se me caían los dientes..."></textarea>
-    <button id="analyzeBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-xl font-semibold">Interpretar sueño</button>
+
+    <button id="analyzeBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-xl font-semibold">
+      Interpretar sueño
+    </button>
+
     <div id="result" class="mt-4 space-y-3 hidden">
       <div><strong>🔮 Significado simbólico:</strong> <p id="symbolic" class="text-gray-700"></p></div>
       <div><strong>🧠 Análisis emocional:</strong> <p id="emotional" class="text-gray-700"></p></div>
       <div><strong>💡 Consejo personal:</strong> <p id="advice" class="text-gray-700"></p></div>
     </div>
   </div>
+
+  <script>
+    const btn = document.getElementById("analyzeBtn");
+    const input = document.getElementById("dreamInput");
+    const resultBox = document.getElementById("result");
+    const symbolic = document.getElementById("symbolic");
+    const emotional = document.getElementById("emotional");
+    const advice = document.getElementById("advice");
+
+    btn.addEventListener("click", async () => {
+      const texto = input.value.trim();
+      if (!texto) {
+        alert("Por favor escribí un sueño antes de interpretar.");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = "Interpretando...";
+
+      symbolic.textContent = "";
+      emotional.textContent = "";
+      advice.textContent = "";
+      resultBox.classList.add("hidden");
+
+      try {
+        const respuesta = await fetch("/.netlify/functions/interpretar", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sueño: texto }),
+        });
+
+        const data = await respuesta.json();
+        if (data.respuesta) {
+          // Separamos por partes
+          const simbolico = data.respuesta.match(/1\.\s*(.*?)\s*2\./s);
+          const emocional = data.respuesta.match(/2\.\s*(.*?)\s*3\./s);
+          const consejo = data.respuesta.match(/3\.\s*(.*)/s);
+
+          symbolic.textContent = simbolico?.[1]?.trim() || "No se pudo interpretar.";
+          emotional.textContent = emocional?.[1]?.trim() || "No se pudo interpretar.";
+          advice.textContent = consejo?.[1]?.trim() || "No se pudo interpretar.";
+
+          resultBox.classList.remove("hidden");
+        } else {
+          symbolic.textContent = "No se pudo interpretar el sueño.";
+          resultBox.classList.remove("hidden");
+        }
+      } catch (error) {
+        symbolic.textContent = "Error al contactar con la IA.";
+        resultBox.classList.remove("hidden");
+        console.error(error);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Interpretar sueño";
+      }
+    });
+  </script>
 </body>
 </html>

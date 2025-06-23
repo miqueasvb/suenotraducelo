@@ -1,6 +1,6 @@
-const { Configuration, OpenAIApi } = require("openai");
+import { Configuration, OpenAIApi } from "openai";
 
-exports.handler = async function(event, context) {
+export async function handler(event, context) {
   try {
     const body = JSON.parse(event.body);
     const sueño = body.sueño;
@@ -47,4 +47,4 @@ Sueño: "${sueño}"
       body: JSON.stringify({ error: "Hubo un problema al interpretar el sueño." }),
     };
   }
-};
+}
